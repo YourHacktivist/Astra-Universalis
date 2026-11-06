@@ -1,0 +1,83 @@
+{
+  "name": "astra-universalis",
+  "productName": "Astra Universalis",
+  "version": "0.1.2",
+  "description": "Atelier de cartographie stellaire pour rôlistes : systèmes solaires, galaxies, nébuleuses.",
+  "author": "Astra Universalis",
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "electron/main.cjs",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k -n web,app -c cyan,yellow \"vite --port 5173 --strictPort\" \"wait-on tcp:127.0.0.1:5173 && electron . --dev\"",
+    "dev:web": "vite --port 5173 --strictPort",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "build": "tsc --noEmit -p tsconfig.json && vite build",
+    "start": "electron .",
+    "dist": "npm run build && electron-builder --win",
+    "dist:dir": "npm run build && electron-builder --win --dir"
+  },
+  "build": {
+    "appId": "app.astra.universalis",
+    "productName": "Astra Universalis",
+    "electronDist": "node_modules/electron/dist",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "fileAssociations": [
+      {
+        "ext": "astra",
+        "name": "Projet Astra Universalis",
+        "description": "Projet Astra Universalis",
+        "role": "Editor"
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "devDependencies": {
+    "@fontsource-variable/ibm-plex-sans": "^5.3.0",
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.2",
+    "@react-three/postprocessing": "^3.2.2",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.186.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
+    "concurrently": "^10.0.6",
+    "electron": "^45.0.0",
+    "electron-builder": "^26.15.3",
+    "immer": "^11.2.9",
+    "lucide-react": "^1.61.0",
+    "postprocessing": "^6.39.5",
+    "radix-ui": "^1.8.1",
+    "react": "^19.3.1",
+    "react-colorful": "^5.8.1",
+    "react-dom": "^19.3.1",
+    "tailwindcss": "^4.3.3",
+    "three": "^0.186.1",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.7",
+    "wait-on": "^9.5.1",
+    "zustand": "^5.0.16"
+  }
+}

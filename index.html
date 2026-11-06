@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Astra Universalis</title>
+    <link rel="icon" type="image/png" href="./icon.png" />
+    <link rel="preload" href="./brand/logo-night.png" as="image" />
+    <style>
+      @font-face {
+        font-family: 'Splash Display';
+        src: url('./fonts/cormorant-garamond-latin-500-normal.woff2') format('woff2');
+        font-weight: 500;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Splash Display';
+        src: url('./fonts/cormorant-garamond-latin-500-italic.woff2') format('woff2');
+        font-weight: 500;
+        font-style: italic;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Splash Mono';
+        src: url('./fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2');
+        font-weight: 400;
+        font-display: swap;
+      }
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #030304;
+      }
+      #astra-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background: #030304;
+        color: #ecebe6;
+        user-select: none;
+        transition: opacity 650ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      #astra-splash.as-out {
+        opacity: 0;
+        pointer-events: none;
+      }
+      #astra-splash .as-stars {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1px;
+        height: 1px;
+        border-radius: 50%;
+        opacity: 0;
+        animation: as-in 1600ms ease-out 120ms forwards;
+      }
+      #astra-splash .as-plate {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: transform 650ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      #astra-splash.as-out .as-plate {
+        transform: translateY(-6px);
+      }
+      #astra-splash .as-logo {
+        width: 104px;
+        height: 104px;
+        opacity: 0;
+        animation: as-rise 900ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+      }
+      #astra-splash h1 {
+        margin: 18px 0 0;
+        font: 500 50px/0.94 'Splash Display', 'Cormorant Garamond', Georgia, serif;
+        letter-spacing: 0.01em;
+        text-align: center;
+        opacity: 0;
+        animation: as-rise 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 140ms forwards;
+      }
+      #astra-splash h1 em {
+        font-style: italic;
+        color: #a9a8a1;
+      }
+      #astra-splash .as-rules {
+        width: 268px;
+        margin-top: 22px;
+        opacity: 0;
+        animation: as-in 700ms ease-out 320ms forwards;
+      }
+      #astra-splash .as-rules i {
+        display: block;
+        height: 1px;
+        background: rgb(133 132 125 / 0.4);
+      }
+      #astra-splash .as-rules i + i {
+        margin-top: 3px;
+        background: rgb(133 132 125 / 0.2);
+      }
+      #astra-splash .as-tagline {
+        margin: 16px 0 0;
+        font: italic 500 16px/1.35 'Splash Display', 'Cormorant Garamond', Georgia, serif;
+        color: #a9a8a1;
+        opacity: 0;
+        animation: as-in 700ms ease-out 380ms forwards;
+      }
+      #astra-splash .as-gauge {
+        width: 268px;
+        margin-top: 44px;
+        opacity: 0;
+        animation: as-in 700ms ease-out 480ms forwards;
+      }
+      #astra-splash .as-ruler {
+        position: relative;
+        height: 9px;
+      }
+      #astra-splash .as-track {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 1px;
+        background: rgb(255 255 255 / 0.1);
+      }
+      #astra-splash .as-ticks {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 269px;
+        height: 4px;
+        background: repeating-linear-gradient(90deg, rgb(255 255 255 / 0.15) 0 1px, transparent 1px 26.8px);
+      }
+      #astra-splash .as-ruler::before,
+      #astra-splash .as-ruler::after,
+      #astra-splash .as-ticks::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        width: 1px;
+        height: 9px;
+        background: rgb(255 255 255 / 0.24);
+      }
+      #astra-splash .as-ruler::before { left: 0; }
+      #astra-splash .as-ruler::after { right: 0; }
+      #astra-splash .as-ticks::after { left: 134px; }
+      #astra-splash .as-fill {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 1px;
+        background: #d9ad62;
+        transform-origin: 0 50%;
+        transform: scaleX(0);
+        transition: transform 420ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      #astra-splash .as-cursor {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 1px;
+        height: 13px;
+        background: #ecc98a;
+        transition: left 420ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      #astra-splash .as-status {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 11px;
+        font: 400 10px/1 'Splash Mono', 'IBM Plex Mono', Consolas, monospace;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #85847d;
+        white-space: nowrap;
+      }
+      #astra-splash .as-status b {
+        font-weight: 400;
+        color: #a9a8a1;
+        font-variant-numeric: tabular-nums;
+      }
+      #astra-splash .as-corner {
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        border-color: rgb(255 255 255 / 0.16);
+        border-style: solid;
+        border-width: 0;
+      }
+      #astra-splash .as-tl { left: 28px; top: 56px; border-left-width: 1px; border-top-width: 1px; }
+      #astra-splash .as-tr { right: 28px; top: 56px; border-right-width: 1px; border-top-width: 1px; }
+      #astra-splash .as-bl { left: 28px; bottom: 28px; border-left-width: 1px; border-bottom-width: 1px; }
+      #astra-splash .as-br { right: 28px; bottom: 28px; border-right-width: 1px; border-bottom-width: 1px; }
+      #astra-splash .as-caption {
+        position: absolute;
+        bottom: 34px;
+        font: 400 9.5px/1 'Splash Mono', 'IBM Plex Mono', Consolas, monospace;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: #5f5e59;
+      }
+      #astra-splash .as-cl { left: 52px; }
+      #astra-splash .as-cr { right: 52px; }
+      @keyframes as-in {
+        to { opacity: 1; }
+      }
+      @keyframes as-rise {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: none; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #astra-splash,
+        #astra-splash * {
+          animation-duration: 1ms !important;
+          animation-delay: 0ms !important;
+          transition-duration: 1ms !important;
+        }
+        #astra-splash { transition-duration: 200ms !important; }
+      }
+      @media (max-height: 520px) {
+        #astra-splash .as-gauge { margin-top: 28px; }
+        #astra-splash .as-caption, #astra-splash .as-corner { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="astra-splash" aria-busy="true">
+      <div class="as-stars" aria-hidden="true"></div>
+      <span class="as-corner as-tl" aria-hidden="true"></span>
+      <span class="as-corner as-tr" aria-hidden="true"></span>
+      <span class="as-corner as-bl" aria-hidden="true"></span>
+      <span class="as-corner as-br" aria-hidden="true"></span>
+      <span class="as-caption as-cl" aria-hidden="true">Atlas céleste · Frontispice</span>
+      <span class="as-caption as-cr" aria-hidden="true">Pl. 0</span>
+      <div class="as-plate">
+        <img class="as-logo" src="./brand/logo-night.png" alt="" draggable="false" />
+        <h1>Astra<br /><em>Universalis</em></h1>
+        <div class="as-rules" aria-hidden="true"><i></i><i></i></div>
+        <p class="as-tagline">Cartes des mondes, des routes et des secrets</p>
+        <div class="as-gauge">
+          <div class="as-ruler" aria-hidden="true">
+            <div class="as-track"></div>
+            <div class="as-ticks"></div>
+            <div class="as-fill"></div>
+            <div class="as-cursor"></div>
+          </div>
+          <div class="as-status" role="status" aria-live="polite">
+            <span class="as-label">Chargement du moteur</span>
+            <b class="as-pct">0 %</b>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="./splash.js"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
